@@ -6,4 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes: []
   m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8d80ea12846e7444db90c2197394cb6e, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2c33d8198a63f674cb102cc02d273ca4, type: 2}
