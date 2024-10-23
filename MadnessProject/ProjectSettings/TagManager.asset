@@ -11,10 +11,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - enemyLayer
+  - playerLayer
+  - groundLayer
+  - objectLayers
   - 
   - 
   - 
