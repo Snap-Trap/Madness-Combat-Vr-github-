@@ -12,7 +12,7 @@ public class GruntAi : MonoBehaviour
     private Transform player;
 
     // So it can tell the difference between ground and player, also neat to dodge random obstacles
-    private LayerMask whatIsGround, whatIsPlayer;
+    private LayerMask whatIsGround, whatIsPlayer, whatIsObject;
 
     // This is patroling ai
 
@@ -26,32 +26,34 @@ public class GruntAi : MonoBehaviour
 
     // To switch between ai states
     public float sightRange, attackRange;
-    [SerializeField] private bool playerInSightRange, playerInSphereRange, playerInAttackRange;
+    [SerializeField] private bool playerInSightRange, playerInSphereRange, playerInAttackRange = false;
 
     private void Start()
     {
         player = GameObject.Find("PlayerXROrigin").transform;
         whatIsGround = LayerMask.GetMask("groundLayer");
         whatIsPlayer = LayerMask.GetMask("playerLayer");
+        whatIsObject = LayerMask.GetMask("objectLayer");
         agent = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
-       
         // Checks for the sight range and attack range in a sphere around the enemy
         playerInSphereRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
         // Checks if the player is in the sphere range
-        while (playerInSphereRange)
+        // L: I'm not sure if this is the best way to do this, but it works for now
+        // L: Alright this fucking shit doesn't work, everytime the player is in the spherecast the raycast goes out and the spherecast too?
+        if (playerInSphereRange)
         {
-            // If the player is in the sphere range, it will check if the player is in the sight range for actual line of sight
-            playerInSightRange = Physics.Raycast(transform.position, playerTransform, whatIsPlayer);
- 
-            // C'mon you know what this is ya fucking ass
-            Debug.DrawRay(transform.position, playerTransform, Color.red);
+            if (Physics.Raycast(transform.position, playerTransform, sightRange, whatIsPlayer))
+            {
+                playerInSightRange = true;
+            }
         }
+
 
         // Simple logic, it will either patrol, chase, or attack the player depending on what states the variables are in
         if (!playerInSightRange && !playerInAttackRange) Patroling();
@@ -105,6 +107,16 @@ public class GruntAi : MonoBehaviour
 
         // Rotates towards the player
         transform.LookAt(player);
+
+        // L: I don't actually have any attack code, so I'll just leave this here for now
+    }
+
+    IEnumerator shootRayCooldown(float time)
+    {
+        playerTransform = player.position - transform.position;
+        playerInSightRange = Physics.Raycast(transform.position, playerTransform, sightRange, whatIsPlayer);
+        Debug.DrawRay(transform.position, playerTransform, Color.red);
+        yield return new WaitForSeconds(time);
     }
 
     private void OnDrawGizmosSelected()
