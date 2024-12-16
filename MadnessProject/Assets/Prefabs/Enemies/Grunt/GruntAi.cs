@@ -48,9 +48,18 @@ public class GruntAi : MonoBehaviour
         // L: Alright this fucking shit doesn't work, everytime the player is in the spherecast the raycast goes out and the spherecast too?
         if (playerInSphereRange)
         {
-            if (Physics.Raycast(transform.position, playerTransform, sightRange, whatIsPlayer))
+            Vector3 directionToPlayer = (player.position - transform.position).normalized;   
+
+            if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, sightRange))
             {
-                playerInSightRange = true;
+                if (hit.collider.CompareTag("Player"))
+                {
+                    playerInSightRange = true;
+                }
+                else
+                {
+                    playerInSightRange = false;
+                }
             }
         }
 
