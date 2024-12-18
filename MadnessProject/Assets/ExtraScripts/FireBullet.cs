@@ -12,7 +12,7 @@ public class FireBullet : MonoBehaviour
 
     public Transform spawnPoint;
 
-    public float bulletSpeed = 20;
+    public float bulletSpeed = 20, bulletDamage = 10;
 
     private void Start()
     {
