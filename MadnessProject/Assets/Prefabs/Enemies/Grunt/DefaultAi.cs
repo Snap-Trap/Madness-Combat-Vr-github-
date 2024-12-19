@@ -11,7 +11,9 @@ public class DefaultAi : MonoBehaviour
 
     [SerializeField] private NavMeshAgent agent;
 
-    [SerializeField] private float speed, health, attackRange;
+    [SerializeField] private float speed, attackRange;
+
+    public float health;
 
     private bool playerInAttackRange = false;
 
@@ -27,13 +29,9 @@ public class DefaultAi : MonoBehaviour
         attackRange = 4;
         agent.speed = speed;
 
+        // L: So apparently this is how you start a coroutine
+        // L: You don't do it in the Update, but in the Start, what the fuck why did nobody tell me this
         StartCoroutine(EnemyActions(0.3f));
-    }
-
-    public void Update()
-    {
-
-        // MoveToPlayer();
     }
 
     IEnumerator EnemyActions(float time)
